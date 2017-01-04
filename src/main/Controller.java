@@ -49,7 +49,7 @@ public class Controller implements Serializable, Initializable {
     }
 
     public void newCustomer(MouseEvent mouseEvent) {
-        int random = (int) (Math.random() * ((4 - 1) + 1) + 1); // we know that, we have value between <1,4>
+        int random = (int) (Math.random() * ((3 - 1) + 1) + 1);
         Customer customer;
         switch (random) {
             case 1:
@@ -75,7 +75,6 @@ public class Controller implements Serializable, Initializable {
         thread.setDaemon(true);
         thread.start();
         Main.getDeliverers().add(deliverer);
-        //System.out.println(deliverer.toString());
     }
 
     public void newOrder(MouseEvent mouseEvent) {
