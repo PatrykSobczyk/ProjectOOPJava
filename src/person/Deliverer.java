@@ -40,7 +40,6 @@ public class Deliverer extends Person implements Serializable, Runnable {
     private DrivingLicence mDrivingLicence;
     private Position mPosition;
     private int mDistance;
-    private List<Position> mRouteList;
     @Nullable
     private Vehicle mVehicle;
     private boolean mWorking;
@@ -51,7 +50,16 @@ public class Deliverer extends Person implements Serializable, Runnable {
     private DelivererController mDelivererController;
     private Stage mStage;
 
-
+    /**
+     * Konstruktor dostawcy
+     *
+     * @param name
+     * @param surname
+     * @param PESEL
+     * @param workSchedule
+     * @param drivingLicence
+     * @param vehicle
+     */
     public Deliverer(String name, String surname, String PESEL, WorkSchedule workSchedule, DrivingLicence drivingLicence, Vehicle vehicle) {
         super(name, surname);
         mPESEL = PESEL;
@@ -62,10 +70,21 @@ public class Deliverer extends Person implements Serializable, Runnable {
         configPicture();
     }
 
+    /**
+     * Konstruktor dostawcy
+     * @param name
+     * @param surname
+     * @param PESEL
+     * @param workSchedule
+     * @param drivingLicence
+     */
     public Deliverer(String name, String surname, String PESEL, WorkSchedule workSchedule, DrivingLicence drivingLicence) {
         this(name, surname, PESEL, workSchedule, drivingLicence, null);
     }
 
+    /**
+     * Konstruktor losowy dostawcy
+     */
     public Deliverer() {
         super();
         mPESEL = String.valueOf(String.valueOf((int) (Math.random() * ((99 - 10) + 1) + 10)) + String.valueOf((int) (Math.random() * ((12 - 1) + 1) + 1)) +
@@ -87,62 +106,122 @@ public class Deliverer extends Person implements Serializable, Runnable {
 
     }
 
+    /**
+     * Zwraca czy dostawca jest do usunecia
+     * @return czy do usunecia
+     */
     public boolean isToDelete() {
         return mToDelete;
     }
 
+    /**
+     * Ustawia do usunecia
+     * @param toDelete
+     */
     public void setToDelete(boolean toDelete) {
         mToDelete = toDelete;
     }
 
+    /**
+     * Zwraca czy dostawca wraca do restauracji
+     * @return czy wraca do restauracji
+     */
     public boolean isComingBack() {
         return mComingBack;
     }
 
+    /**
+     * UStawia czy ma wracac do restauracji
+     * @param comingBack
+     */
     public void setComingBack(boolean comingBack) {
         mComingBack = comingBack;
     }
 
+    /**
+     * Zwraca czy pracuje
+     * @return czy pracuje
+     */
     public boolean isWorking() {
         return mWorking;
     }
 
+    /**
+     * Ustawia aby pracowal
+     * @param working
+     */
     public void setWorking(boolean working) {
         mWorking = working;
     }
 
+    /**
+     * Zwraca pesel
+     * @return pesel
+     */
     public String getPESEL() {
         return mPESEL;
     }
 
+    /**
+     * Ustawia pesel
+     * @param PESEL
+     */
     public void setPESEL(String PESEL) {
         mPESEL = PESEL;
     }
 
+    /**
+     * Zwraca grafik pracy
+     * @return
+     */
     public WorkSchedule getWorkSchedule() {
         return mWorkSchedule;
     }
 
+    /**
+     * UStawia grafik pracy
+     * @param workSchedule
+     */
     public void setWorkSchedule(WorkSchedule workSchedule) {
         mWorkSchedule = workSchedule;
     }
 
+    /**
+     * Zwraca pojazd
+     * @return pojazd
+     */
     public Vehicle getVehicle() {
         return mVehicle;
     }
 
+    /**
+     * Ustawia pojazd
+     * @param vehicle
+     */
     public void setVehicle(Vehicle vehicle) {
         mVehicle = vehicle;
     }
 
+    /**
+     * Zwraca pozycje
+     * @return pozycja
+     */
     public Position getPosition() {
         return mPosition;
     }
 
+    /**
+     * Ustawia pozycje
+     * @param position
+     */
     public void setPosition(Position position) {
         mPosition = position;
     }
 
+    /**
+     * Dodaje pojazd zgodny z licencja
+     * @param vehicle
+     */
     public void addVehicle(Vehicle vehicle) {
         System.out.println(vehicle);
         this.setPosition(Main.getRestorationAddress().getPosition());
@@ -166,14 +245,26 @@ public class Deliverer extends Person implements Serializable, Runnable {
         }
     }
 
+    /**
+     * Zwraca czy dostawca ma przypisany pojazd
+     * @return czy ma pojazd
+     */
     public boolean hasVehicle() {
         return mVehicle != null;
     }
 
+    /**
+     * Zwraca licencje prawajazda
+     * @return enum z licencja
+     */
     public DrivingLicence getDrivingLicence() {
         return mDrivingLicence;
     }
 
+    /**
+     * Ustawia licencje prawa jazdy
+     * @param drivingLicence
+     */
     public void setDrivingLicence(DrivingLicence drivingLicence) {
         mDrivingLicence = drivingLicence;
     }
@@ -186,6 +277,11 @@ public class Deliverer extends Person implements Serializable, Runnable {
                 ", my Driving Licence - " + this.getDrivingLicence();
     }
 
+    /**
+     * Metoda odpowiedzialna za utworzenie okna szczegolowego o dostawcy
+     * @param mouseEvent
+     * @throws Exception
+     */
     public void delivererInfo(MouseEvent mouseEvent) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("deliverer.fxml"));
         Parent root = loader.load();
@@ -210,6 +306,10 @@ public class Deliverer extends Person implements Serializable, Runnable {
         thread.start();
     }
 
+    /**
+     * Zwraca liste szczegolow dla dostawcy
+     * @return obserwowana lista szczegolow
+     */
     public ObservableList<String> getCustomerDetailsList() {
         ObservableList<String> list = FXCollections.observableArrayList();
         list.add("Name:" + getName());
@@ -229,6 +329,9 @@ public class Deliverer extends Person implements Serializable, Runnable {
         return list;
     }
 
+    /**
+     * Konfiguruje obrazek dostawcy
+     */
     public void configPicture() {
         setPicture(new ImageView(new Image(getSmallImageURL())));
         mPosition = getPosition();
@@ -250,65 +353,106 @@ public class Deliverer extends Person implements Serializable, Runnable {
         getPaneChildren().add(getPicture());
     }
 
+    /**
+     * Zwraca dystans do celu
+     * @return dystans
+     */
     public int getDistance() {
         return mDistance;
     }
 
+    /**
+     * Ustawia dystans
+     * @param distance
+     */
     public void setDistance(int distance) {
         mDistance = distance;
     }
 
-    public List<Position> getRouteList() {
-        return mRouteList;
-    }
-
-    public void setRouteList(List<Position> routeList) {
-        mRouteList = routeList;
-    }
-
+    /**
+     * Zwraca zamowienia ktore obsluguje dostawca
+     * @return lista zamowien
+     */
     public List<Order> getOrders() {
         return mOrders;
     }
 
+    /**
+     * Ustawia zamowienia
+     * @param orders
+     */
     public void setOrders(List<Order> orders) {
         mOrders = orders;
     }
 
+    /**
+     * Zwraca obecny cel
+     * @return pozycja obecnego celu
+     */
     public Position getCurrentTarget() {
         return mCurrentTarget;
     }
 
+    /**
+     * UStawia obecny cel
+     * @param currentTarget
+     */
     public void setCurrentTarget(Position currentTarget) {
         mCurrentTarget = currentTarget;
     }
 
+    /**
+     * Kontroler dla doreczyciela
+     * @return klasa kontrolera
+     */
     public DelivererController getDelivererController() {
         return mDelivererController;
     }
 
+    /**
+     * Ustawia klase kontrolera
+     * @param delivererController
+     */
     public void setDelivererController(DelivererController delivererController) {
         mDelivererController = delivererController;
     }
 
+    /**
+     * Stage na ktorej jest wyswietlona informacja o doreczycielu
+     * @return stage
+     */
     public Stage getStage() {
         return mStage;
     }
 
+    /**
+     * Ustawia stage
+     * @param stage
+     */
     public void setStage(Stage stage) {
         mStage = stage;
     }
 
+    /**
+     * Zwraca adres do malego obrazka
+     * @return adres do malego obraka
+     */
     public String getSmallImageURL() {
         return "/images/bus.png";
     }
 
+    /**
+     * Implementue prace dostawcy. Sprawdza czy zakonczyl prace, czy zostal usunety czy sa zamowienia do rozwiezienia.
+     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             if (hasVehicle()) {
-                mOrders.addAll(Main.getOrdersList());
-                Main.getOrdersList().removeAll(mOrders);
-                System.out.println("I have orders:" + mOrders.size());
+                if (!isWorking()) {
+                    mOrders.addAll(Main.getOrdersList());
+                    Main.getOrdersList().removeAll(mOrders);
+                    System.out.println("I have orders:" + mOrders.size());
+                }
                 if (mOrders.size() > 0 && !isToDelete()) {
                     startDelivery();
                     drawDelivererMotion();
@@ -342,12 +486,15 @@ public class Deliverer extends Person implements Serializable, Runnable {
 
     }
 
+    /**
+     * Funkcje umozliwiajaca powrot do restauracji
+     */
     private void comeBack() {
         mCurrentTarget = new Position(Main.getRestorationAddress().getPosition());
         mDistance = mCurrentTarget.getDistance(getPosition());
         while (this.mDistance > 10) {
             try {
-                this.motion();
+                this.motionAndPetrol();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -375,7 +522,9 @@ public class Deliverer extends Person implements Serializable, Runnable {
 
     }
 
-
+    /**
+     * Funkcje rozpoczynajaca rozwozenie zamowienia
+     */
     private void startDelivery() {
         this.mWorking = true;
         mCurrentTarget = mOrders.get(0).getCustomer().getAddress().getPosition();
@@ -396,10 +545,13 @@ public class Deliverer extends Person implements Serializable, Runnable {
         }
     }
 
+    /**
+     * Funkcja odslugujaca rysowanie pracy doreczyciela
+     */
     private void drawDelivererMotion() {
         while (this.mDistance > 10 && !this.isComingBack()) {
             try {
-                this.motion();
+                this.motionAndPetrol();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -409,6 +561,9 @@ public class Deliverer extends Person implements Serializable, Runnable {
         }
     }
 
+    /**
+     * Funkcja obslugujaca zamowienia gdy zostalo zakonczone jedno z nich
+     */
     private void delivered() {
         try {
             Thread.sleep(1000);
@@ -424,7 +579,12 @@ public class Deliverer extends Person implements Serializable, Runnable {
         }
     }
 
-    private void motion() throws InterruptedException {
+    /**
+     * Funkcja rysujaca zamowienie zgodnie z lokalizacjia, a takze zmieniajaca wartosc paliwa
+     *
+     * @throws InterruptedException
+     */
+    private void motionAndPetrol() throws InterruptedException {
         Position position = mCurrentTarget;
         Platform.runLater(new Runnable() {
             @Override
@@ -490,6 +650,11 @@ public class Deliverer extends Person implements Serializable, Runnable {
         }
     }
 
+    /**
+     * Sprawdza czy na danym polu wystepuje przejazd drogowy
+     * @param position
+     * @return
+     */
     public boolean checkIfTollRoad(Position position) {
         for (TollRoad x : Main.getTollRoads()) {
             if (x.getPosition().equals(position)) {

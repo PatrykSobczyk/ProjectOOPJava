@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import menu.Meal;
 import menu.Order;
+import menu.Product;
 import person.CompanyCustomer;
 import person.Customer;
 import person.Deliverer;
@@ -15,8 +16,13 @@ import person.RegularCustomer;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
+/**
+ * Created by Patryk Sobczyk on 17/11/2016.
+ * Kontroler do glownego okna
+ */
 public class Controller implements Serializable, Initializable {
     @FXML
     private ImageView RestaurantImageView;
@@ -38,16 +44,35 @@ public class Controller implements Serializable, Initializable {
         return MapsPane;
     }
 
+    /**
+     * Wykonuje czynności startowe glownego okna aplikacji.
+     *
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+    /**
+     * Obsluga klikniecia na przycisk Meal
+     * @param mouseEvent
+     */
     public void newMeal(MouseEvent mouseEvent) {
-        Meal meal = new Meal();
-        Main.getRestaurantMenu().add(meal);
-        System.out.println(meal.toString());
+        Product product;
+        if (new Random().nextBoolean()) {
+            product = new Meal();
+        } else {
+            product = new Product();
+        }
+        Main.getRestaurantMenu().add(product);
+        System.out.println(product.toString());
     }
 
+    /**
+     * Obsluga klikniecia na przycisk Customer
+     * @param mouseEvent
+     */
     public void newCustomer(MouseEvent mouseEvent) {
         int random = (int) (Math.random() * ((3 - 1) + 1) + 1);
         Customer customer;
@@ -69,6 +94,10 @@ public class Controller implements Serializable, Initializable {
         System.out.println(customer.toString());
     }
 
+    /**
+     * Obsluga klikniecia na przycisk Deliverer
+     * @param mouseEvent
+     */
     public void newDeliverer(MouseEvent mouseEvent) {
         Deliverer deliverer = new Deliverer();
         Thread thread = new Thread(deliverer);
@@ -77,6 +106,10 @@ public class Controller implements Serializable, Initializable {
         Main.getDeliverers().add(deliverer);
     }
 
+    /**
+     * Obsluga klikniecia na przycisk Order
+     * @param mouseEvent
+     */
     public void newOrder(MouseEvent mouseEvent) {
         if (Main.getCustomers().size() == 0) {
             System.out.println("Unfortunately, no customers to order.");
@@ -87,13 +120,24 @@ public class Controller implements Serializable, Initializable {
         }
     }
 
+    /**
+     * Obsluga klikniecia na ikone restauracji, w konsoli pokazuje zamowienia
+     * @param mouseEvent
+     */
     public void restaurantImageViewListener(MouseEvent mouseEvent) {
         showOrders();
     }
 
+    /**
+     * Pokazuje zamowienia w konsoli
+     */
     private void showOrders() {
-        for (Order x : Main.getOrdersList()) {
-            System.out.println(x.toString());
+        if (Main.getOrdersList().size() > 0) {
+            for (Order x : Main.getOrdersList()) {
+                System.out.println(x.toString());
+            }
+        } else {
+            System.out.println("No Orders");
         }
     }
 }

@@ -36,6 +36,9 @@ public class Customer extends Person implements Serializable, Runnable {
     private boolean mToDelete;
     private Stage mStage;
 
+    /**
+     * Konstruktor losowy klienta
+     */
     public Customer() {
         super();
         mID = mStaticID++;
@@ -46,6 +49,16 @@ public class Customer extends Person implements Serializable, Runnable {
 
     }
 
+    /**
+     * Konstruktor klienta
+     *
+     * @param name
+     * @param surname
+     * @param ID
+     * @param phoneNumber
+     * @param address
+     * @param email
+     */
     public Customer(String name, String surname, int ID, String phoneNumber, Address address, String email) {
         super(name, surname);
         mID = ID;
@@ -55,62 +68,99 @@ public class Customer extends Person implements Serializable, Runnable {
         configPicture(address.getPosition(), ID);
     }
 
-    public Customer(String name, String surname, int ID, String phoneNumber, int longitude, int latitude, String cityName, String email) {
-        this(name, surname, ID, phoneNumber, new Address(longitude, latitude, cityName), email);
-    }
-
-    public Customer(String name, String surname, int ID, String phoneNumber, Address address) {
-        this(name, surname, ID, phoneNumber, address, "");
-    }
-
-    public Customer(String name, String surname, int ID, String phoneNumber, int longitude, int latitude, String cityName) {
-        this(name, surname, ID, phoneNumber, new Address(longitude, latitude, cityName), "");
-    }
-
+    /**
+     * Zwraca czy klient zostaw przeznaczony do usuniecia
+     * @return czy do usuniecia
+     */
     public boolean isToDelete() {
         return mToDelete;
     }
 
+    /**
+     * Ustawia wartosc czy do usuniecia
+     * @param toDelete
+     */
     public void setToDelete(boolean toDelete) {
         mToDelete = toDelete;
     }
 
+    /**
+     * Zwraca ID
+     * @return
+     */
     public int getID() {
         return mID;
     }
 
+    /**
+     * Ustawia ID
+     * @param ID
+     */
     public void setID(int ID) {
         mID = ID;
     }
 
+    /**
+     * Zwraca numer telefonu
+     * @return numer telefonu
+     */
     public String getPhoneNumber() {
         return mPhoneNumber;
     }
 
+    /**
+     * Ustawia numer telefonu
+     * @param phoneNumber
+     */
     public void setPhoneNumber(String phoneNumber) {
         mPhoneNumber = phoneNumber;
     }
 
+    /**
+     * Zwraca adres
+     * @return adres
+     */
     public Address getAddress() {
         return mAddress;
     }
 
+    /**
+     * Ustawia adres
+     * @param address
+     */
     public void setAddress(Address address) {
         mAddress = address;
     }
 
+    /**
+     * Zwraca email
+     * @return email
+     */
     public String getEmail() {
         return mEmail;
     }
 
+    /**
+     * Ustawia email
+     * @param email
+     */
     public void setEmail(String email) {
         mEmail = email;
     }
 
+    /**
+     * Szkielet funkcji placacej za zamowienie. Placenie bylo wyszczegolnione w wymaganiach
+     * @param order
+     */
     public void payToOrder(Order order) {
         order.getTotalPrice(); //Paying for orders it is very primitive. Our customers are prosperously. :)
     }
 
+    /**
+     * Ustawienie obrazka w glownym oknie aplikacji
+     * @param position
+     * @param id
+     */
     public void configPicture(Position position, int id) {
         setPicture(new ImageView(new Image(getSmallImageURL())));
         getPicture().xProperty().set(position.getLongitude());
@@ -142,6 +192,11 @@ public class Customer extends Person implements Serializable, Runnable {
                 ", my E-Mail - " + this.getEmail();
     }
 
+    /**
+     * Zwrocenie szczegolowych informacji o kliencie
+     * @param mouseEvent
+     * @throws Exception
+     */
     public void customerInfo(MouseEvent mouseEvent) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("customer.fxml"));
         Parent root = loader.load();
@@ -181,6 +236,10 @@ public class Customer extends Person implements Serializable, Runnable {
         thread.start();
     }
 
+    /**
+     * Lista z szczegolowymi danymi o kliencie
+     * @return obserwowana lista z danymi o kliencie
+     */
     public ObservableList<String> customerDetailsList() {
         ObservableList<String> list = FXCollections.observableArrayList();
         list.add("Name:" + getName());
@@ -192,23 +251,38 @@ public class Customer extends Person implements Serializable, Runnable {
         return list;
     }
 
+    /**
+     * Zwraca adres do duzego obrazka
+     * @return adres do duzego obrazka
+     */
     public String getBigImageURL() {
         return "/images/customerbig.png";
     }
 
+    /**
+     * Zwraca adres do malego obrazka
+     * @return adres do malego obrazka
+     */
     public String getSmallImageURL() {
         return "/images/customer.png";
     }
 
+    /**
+     * Metoda odpowiedzalna za generowanie zamowien w okreslonym czasie
+     */
     @Override
     public void run() {
         int frequency = new Random().nextInt(55000) + 5000; // The Customer creates order <5sek;60sek>
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 if (!mToDelete) {
-                    int whichProduct = new Random().nextInt(Main.getRestaurantMenu().size());
-                    Main.getOrdersList().add(new Order(Main.getRestaurantMenu().get(whichProduct), this));
-                    Thread.sleep(frequency);
+                    if (Main.getRestaurantMenu().size() == 0) {
+                        System.out.println("Our Restaurant has not any meal to order. Please create new Meal.");
+                    } else {
+                        int whichProduct = new Random().nextInt(Main.getRestaurantMenu().size());
+                        Main.getOrdersList().add(new Order(Main.getRestaurantMenu().get(whichProduct), this));
+                        Thread.sleep(frequency);
+                    }
                 } else {
                     Thread.currentThread().interrupt();
                 }

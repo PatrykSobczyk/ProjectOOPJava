@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 /**
  * Created by Patryk Sobczyk on 31/12/2016.
+ * Impementacja kontrolera dla widoku szczegolow o dostawcy
  */
 public class DelivererController implements Serializable, Initializable {
     @FXML
@@ -26,27 +27,52 @@ public class DelivererController implements Serializable, Initializable {
     @FXML
     private Label petrolLevel;
 
-
+    /**
+     * Inicjalizacja
+     *
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+    /**
+     * Zwraca obraz dostawcy
+     * @return obraz dostawcy
+     */
     public ImageView getImageDeliverer() {
         return ImageDeliverer;
     }
 
+    /**
+     * Ustawia obraz dostawcy
+     * @param imageDeliverer
+     */
     public void setImageDeliverer(ImageView imageDeliverer) {
         ImageDeliverer = imageDeliverer;
     }
 
+    /**
+     * Zwraca szczegolowe informacje o dostawcy
+     * @return lista szczegolow
+     */
     public ListView<String> getDelivererInfo() {
         return DelivererInfo;
     }
 
+    /**
+     * Ustawia szczegolowe informacje o dostawcy
+     * @param delivererInfo
+     */
     public void setDelivererInfo(ListView delivererInfo) {
         DelivererInfo = delivererInfo;
     }
 
+    /**
+     * Funkcja obslugujaca klikniecie na przycisk powrotu dostawcy
+     * @param mouseEvent
+     */
     public void returnDeliver(MouseEvent mouseEvent) {
         String pesel = getDelivererInfo().getItems().get(2).substring(6);
         for (Deliverer x : Main.getDeliverers()) {
@@ -57,6 +83,10 @@ public class DelivererController implements Serializable, Initializable {
         }
     }
 
+    /**
+     * Funkcja obslugujaca klikniecie na przycisk usunecia dostawcy
+     * @param mouseEvent
+     */
     public void deleteDeliver(MouseEvent mouseEvent) {
         String pesel = getDelivererInfo().getItems().get(2).substring(6);
         System.out.print(pesel);
@@ -69,6 +99,9 @@ public class DelivererController implements Serializable, Initializable {
         }
     }
 
+    /**
+     * Zmienia wartosc benzyny
+     */
     public void changePetrolLevel() {
         String pesel = getDelivererInfo().getItems().get(2).substring(6);
         System.out.print(pesel);
@@ -80,6 +113,10 @@ public class DelivererController implements Serializable, Initializable {
         }
     }
 
+    /**
+     * Aktualizuje dane wyswietlane w szczegolowym oknie, na klikniecie mysza
+     * @param mouseEvent
+     */
     public void updateInfo(MouseEvent mouseEvent) {
         String pesel = getDelivererInfo().getItems().get(2).substring(6);
         System.out.print(pesel);
