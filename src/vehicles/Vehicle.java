@@ -1,30 +1,69 @@
 package vehicles;
 
+import main.Main;
 import world.Position;
+
+import java.io.Serializable;
 
 /**
  * Created by Patryk Sobczyk on 17/11/2016.
  */
-public class Vehicle {
-    private Double mCapacity;
-    private Double mMaxSpeed;
+public abstract class Vehicle implements Serializable {
+    private int mCapacity;
+    private int mMaxSpeed;
     private String mRegistrationNumber;
-    private Double mTankCapacity;
+    private int mTankCapacity;
     private Position mPosition;
+    private int mPetrolLevel;
 
-    public Double getCapacity() {
+    public Vehicle(int capacity, int maxSpeed, String registrationNumber, int tankCapacity, Position position) {
+        mCapacity = capacity;
+        mMaxSpeed = maxSpeed;
+        mRegistrationNumber = registrationNumber;
+        mTankCapacity = tankCapacity;
+        mPosition = position;
+        mPetrolLevel = tankCapacity;
+    }
+
+    public Vehicle() {
+        mCapacity = (int) Math.random() * ((2000 - 100) + 1) + 100;
+        mMaxSpeed = (int) Math.random() * ((170 - 50) + 1) + 50;
+        mRegistrationNumber = "RES" + String.valueOf((int) Math.random() * ((60000 - 10000) + 1) + 10000);
+        mTankCapacity = 0;
+        mPosition = new Position(Main.getRestorationAddress().getPosition());
+        mPetrolLevel = 0;
+
+    }
+
+    public int getPetrolLevel() {
+        return mPetrolLevel;
+    }
+
+    public void setPetrolLevel(int petrolLevel) {
+        mPetrolLevel = petrolLevel;
+    }
+
+    public void refuel() {
+        mPetrolLevel = mTankCapacity;
+    }
+
+    public void changePetrolLevel(int change) {
+        mPetrolLevel += change;
+    }
+
+    public int getCapacity() {
         return mCapacity;
     }
 
-    public void setCapacity(Double capacity) {
+    public void setCapacity(int capacity) {
         mCapacity = capacity;
     }
 
-    public Double getMaxSpeed() {
+    public int getMaxSpeed() {
         return mMaxSpeed;
     }
 
-    public void setMaxSpeed(Double maxSpeed) {
+    public void setMaxSpeed(int maxSpeed) {
         mMaxSpeed = maxSpeed;
     }
 
@@ -36,11 +75,11 @@ public class Vehicle {
         mRegistrationNumber = registrationNumber;
     }
 
-    public Double getTankCapacity() {
+    public int getTankCapacity() {
         return mTankCapacity;
     }
 
-    public void setTankCapacity(Double tankCapacity) {
+    public void setTankCapacity(int tankCapacity) {
         mTankCapacity = tankCapacity;
     }
 
@@ -50,5 +89,10 @@ public class Vehicle {
 
     public void setPosition(Position position) {
         mPosition = position;
+    }
+
+    @Override
+    public String toString() {
+        return "Cap:" + mCapacity + ", MaxSpeed" + mMaxSpeed + ", RegNumb" + mRegistrationNumber + ", TankCap" + mTankCapacity + ", " + mPosition;
     }
 }
